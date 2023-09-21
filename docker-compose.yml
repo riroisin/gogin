@@ -1,0 +1,40 @@
+version: '3.7'
+
+services:
+  goginelk:
+    build:
+      context: .
+    volumes:
+      ## 파일의 readonly 설정 및 외부 파일 수정시 컨테이너 내부의 파일에 적용됨. 외부 파일 수정후 컨테이너 재기동 필요.
+      - ./go/main.go:/usr/share/go/main.go:ro,Z
+      - ./go/templates/header.html:/usr/share/go/templates/header.html:ro,Z
+      - ./go/templates/index.html:/usr/share/go/templates/index.html:ro,Z
+      - ./go/templates/menu.html:/usr/share/go/templates/menu.html:ro,Z
+      ## 컨테이너 내부의 특정 디렉터리를 지정한 volumes로 직접 연결. 용량 관리 용이.      
+      - elasticsearch:/usr/share/elasticsearch/data:Z
+    ports:
+      - 9600:9600
+      - 9300:9300
+      - 9200:9200
+      - 5601:5601
+      - 5044:5044
+      - 8080:8080
+      - 443:443
+      - 80:80
+    networks:
+      - elk
+    restart: unless-stopped
+    
+    ## docker run -i
+    stdin_open: true
+    ## docker run -t
+    tty: true
+    ## shell select
+    entrypoint: /bin/bash
+
+networks:
+  elk:
+    driver: bridge
+
+volumes:
+  elasticsearch:
