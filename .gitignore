@@ -1,1 +1,3 @@
-goginelk/elk/elasticsearch-*.tar.gz
+elk/elasticsearch-*.tar.gz
+elk/logstash-*.tar.gz
+elk/kibana-*.tar.gz
